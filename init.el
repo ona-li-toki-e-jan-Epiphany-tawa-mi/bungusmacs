@@ -127,6 +127,8 @@ With negative N, comment out original line and use the absolute value."
 
 (use-package typescript-mode)
 
+(load-file "mcf/mcf-mode.el")
+
 
 
 ;; Baby gets put in the corner))))
