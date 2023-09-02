@@ -119,6 +119,14 @@ With negative N, comment out original line and use the absolute value."
        '(("\\.apl\\'" . dyalog-mode))
        auto-mode-alist))
 
+(use-package haskell-mode)
+
+(use-package arduino-mode)
+
+(use-package basic-mode)
+
+(use-package typescript-mode)
+
 
 
 ;; Baby gets put in the corner))))
@@ -129,7 +137,7 @@ With negative N, comment out original line and use the absolute value."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (rainbow-delimiters dyalog-mode cobol-mode use-package multiple-cursors doom-modeline))))
+    (typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters dyalog-mode cobol-mode use-package multiple-cursors doom-modeline))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
