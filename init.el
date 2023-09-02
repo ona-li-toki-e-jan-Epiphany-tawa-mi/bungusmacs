@@ -13,10 +13,15 @@
 ;; Disables line numbers for certain major modes.
 (dolist (mode '(shell-mode-hook
 		eshell-mode-hook
+		term-mode-hook
 		dired-mode-hook
 		apropos-mode-hook
 		help-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+(setq display-time-default-load-average nil) ; Removes display of system load from display-time-mode
+(display-time-mode)
+(ignore-errors 'display-battery-mode) ; Ignores erros if there is no battery on the system.
 
 ;; Run dired and open home directory on starup.
 (setq inhibit-startup-screen t)
@@ -65,6 +70,7 @@ With negative N, comment out original line and use the absolute value."
 (require 'package)
 
 (dolist (package '(("melpa" . "https://melpa.org/packages/")))
+		   ;;("nongnu-elpa"  . "https://elpa.nongnu.org/nongnu/")))
   (add-to-list 'package-archives package t))
 
 ;; Initializes the package system.
@@ -87,18 +93,30 @@ With negative N, comment out original line and use the absolute value."
   :bind (("<C-S-up>"   . 'mc/mark-previous-like-this)
 	 ("<C-S-down>" . 'mc/mark-next-like-this)))
 
+
 ;; Make sure to run M-x nerd-icons-install-fonts.
 (use-package nerd-icons)
 (use-package doom-modeline
   :ensure t
   :init (doom-modeline-mode 1))
 
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+
+  
 (use-package cobol-mode)
 (setq auto-mode-alist
       (append
        '(("\\.[cC][oO][bB]\\'" . cobol-mode)
          ("\\.[cC][bB][lL]\\'" . cobol-mode)
          ("\\.[cC][pP][yY]\\'" . cobol-mode))
+       auto-mode-alist))
+
+;; TODO set up dyalog key combos.
+(use-package dyalog-mode)
+(setq auto-mode-alist
+      (append
+       '(("\\.apl\\'" . dyalog-mode))
        auto-mode-alist))
 
 
@@ -111,7 +129,7 @@ With negative N, comment out original line and use the absolute value."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (cobol-mode use-package multiple-cursors doom-modeline))))
+    (rainbow-delimiters dyalog-mode cobol-mode use-package multiple-cursors doom-modeline))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
