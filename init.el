@@ -1,4 +1,49 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; This file is part of bungusmacs.                                           ;;
+;;                                                                            ;;
+;; Bungusmacs is free software: you can redistribute it and/or modify it      ;;
+;; under the terms of the GNU General Public License as published by the Free ;;
+;; Software Foundation, either version 3 of the License, or (at your option)  ;;
+;; any later version.                                                         ;;
+;;                                                                            ;;
+;; Bungusmacs is distributed in the hope that it will be useful, but WITHOUT  ;;
+;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or      ;;
+;; FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for   ;;
+;; more details.                                                              ;;
+;;                                                                            ;;
+;; You should have received a copy of the GNU General Public License along    ;;
+;; with bungusmacs. If not, see <https://www.gnu.org/licenses/>.              ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Bungusmacs is my personal emacs configuration. You're free to use it yourself
+;; if you want, I don't care.
+;;
+;; Here's the features:
+;; - Removes the various ugly bars and tooltips.
+;; - Random dark theme for pleasent viewing.
+;; - Battery level (if applicable) and time in mode line.
+;; - Sexy doom mode line.
+;; - Line numbers except where they do not belong (if I notice, that is) +
+;;   column numbers.
+;; - Rainbow delimiters (though they kinda hard to see fr fr.)
+;; - Autoboot into dired on your home directory in fullscreen mode.
+;; - C-S-SPC to mark the whole file.
+;; - C-c d to duplicate a line (thank the heavens for stackoverflow.)
+;; - Create extra cursor above/below with <C-S-up>/<C-S-down>.
+;; - Modes for the following non-builtin languages:
+;;    > Haskell.
+;;    > Typescript.
+;;    > Arduino-C++.
+;;    > Minecraft function files (the command language.)
+;;    > COBOL.
+;;    > APL.
+;;    > BASIC.
+;;
+;; Author: ona li toki e jan Epiphany tawa mi.
+;;
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Misc. configuration options.                                               ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; UI deuglyfication.
