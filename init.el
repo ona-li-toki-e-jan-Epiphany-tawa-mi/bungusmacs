@@ -21,7 +21,7 @@
 
 (setq display-time-default-load-average nil) ; Removes display of system load from display-time-mode
 (display-time-mode)
-(ignore-errors 'display-battery-mode) ; Ignores erros if there is no battery on the system.
+(display-battery-mode)
 
 ;; Run dired and open home directory on starup.
 (setq inhibit-startup-screen t)
