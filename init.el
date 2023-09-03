@@ -30,6 +30,11 @@
 ;; - C-S-SPC to mark the whole file.
 ;; - C-c d to duplicate a line (thank the heavens for stackoverflow.)
 ;; - Create extra cursor above/below with <C-S-up>/<C-S-down>.
+;; - <C-S-backspace> to delete text from the current position to the start of a
+;;   line.
+;; - Highlighting of trailing whitespace.
+;; - Indentation set to 4 spaces, minus the following exceptions:
+;;    > 3 spaces in cobol-mode.
 ;; - Modes for the following non-builtin languages:
 ;;    > Haskell.
 ;;    > Typescript.
@@ -52,7 +57,6 @@
 (tool-bar-mode -1)
 (tooltip-mode -1)
 (menu-bar-mode -1)
-(load-theme 'wombat)
 
 (column-number-mode)
 (global-display-line-numbers-mode 1)
@@ -66,8 +70,8 @@
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 (setq display-time-default-load-average nil) ; Removes display of system load from display-time-mode
-(display-time-mode)
-(display-battery-mode)
+(display-time-mode 1)
+(display-battery-mode 1)
 
 ;; Run dired and open home directory on starup.
 (setq inhibit-startup-screen t)
@@ -75,6 +79,12 @@
 ;; Starts emacs in fullscreen mode.
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
+;; Sets general indentation to 4 spaces
+(setq-default tab-stop-list '(4 8))
+(setq-default tab-width 4)
+(setq-default indent-line-function 'insert-tab)
+
+(setq-default show-trailing-whitespace t)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -106,6 +116,10 @@ With negative N, comment out original line and use the absolute value."
         (forward-line 1)
         (forward-char pos)))))
 (global-set-key (kbd "C-c d") 'duplicate-line-or-region)
+
+(fset 'delete-from-here-to-start-of-line
+   [?\C-  ?\C-a backspace])
+(global-set-key (kbd "<C-S-backspace>") 'delete-from-here-to-start-of-line)
 
 
 
@@ -141,31 +155,38 @@ With negative N, comment out original line and use the absolute value."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package multiple-cursors
   :bind (("<C-S-up>"   . 'mc/mark-previous-like-this)
-	 ("<C-S-down>" . 'mc/mark-next-like-this)))
+		 ("<C-S-down>" . 'mc/mark-next-like-this)))
 
 
 (use-package nerd-icons)
 (use-package doom-modeline
-  :ensure t
   :init (doom-modeline-mode 1))
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
-  
+(use-package doom-themes
+  :config (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+		doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-Iosvkem t))
+
+
 (use-package cobol-mode
   :config (setq auto-mode-alist
-		(append
-		 '(("\\.[cC][oO][bB]\\'" . cobol-mode)
-		   ("\\.[cC][bB][lL]\\'" . cobol-mode)
-		   ("\\.[cC][pP][yY]\\'" . cobol-mode))
-		 auto-mode-alist)))
+      (append '(("\\.[cC][oO][bB]\\'" . cobol-mode)
+                ("\\.[cC][bB][lL]\\'" . cobol-mode)
+		        ("\\.[cC][pP][yY]\\'" . cobol-mode))
+   	 auto-mode-alist))
+          ;; Disables auto indentation and sets custom sizing.
+          (electric-indent-mode -1)
+          (setq tab-stop-list '(3 6))
+          (setq tab-width 3)
+          (setq cobol-tab-width 3))
 
 ;; TODO set up dyalog key combos.
 (use-package dyalog-mode
   :config (setq auto-mode-alist
-		(append
-		 '(("\\.apl\\'" . dyalog-mode))
+		(append '(("\\.apl\\'" . dyalog-mode))
 		 auto-mode-alist)))
 
 (use-package haskell-mode)
