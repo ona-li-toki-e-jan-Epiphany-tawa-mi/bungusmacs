@@ -62,11 +62,11 @@
 (global-display-line-numbers-mode 1)
 ;; Disables line numbers for certain major modes.
 (dolist (mode '(shell-mode-hook
-		eshell-mode-hook
-		term-mode-hook
-		dired-mode-hook
-		apropos-mode-hook
-		help-mode-hook))
+				eshell-mode-hook
+				term-mode-hook
+				dired-mode-hook
+				apropos-mode-hook
+				help-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 (setq display-time-default-load-average nil) ; Removes display of system load from display-time-mode
@@ -167,8 +167,8 @@ With negative N, comment out original line and use the absolute value."
 
 (use-package doom-themes
   :config (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-		doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-Iosvkem t))
+					 doom-themes-enable-italic t) ; if nil, italics is universally disabled
+          (load-theme 'doom-Iosvkem t))
 
 
 (use-package cobol-mode
@@ -178,10 +178,12 @@ With negative N, comment out original line and use the absolute value."
 		        ("\\.[cC][pP][yY]\\'" . cobol-mode))
    	 auto-mode-alist))
           ;; Disables auto indentation and sets custom sizing.
-          (electric-indent-mode -1)
-          (setq tab-stop-list '(3 6))
-          (setq tab-width 3)
-          (setq cobol-tab-width 3))
+          (add-hook 'cobol-mode (lambda () (
+				(electric-indent-mode -1)
+				(setq tab-stop-list '(3 6))
+				(setq tab-width 3)))
+			 (setq cobol-tab-width 3)
+			 (setq cobol-format-style 'fixed))
 
 ;; TODO set up dyalog key combos.
 (use-package dyalog-mode
@@ -201,6 +203,18 @@ With negative N, comment out original line and use the absolute value."
 
 
 
+(use-package projectile
+  :diminish projectile-mode
+  :config (projectile-mode)
+  :bind-keymap ("C-c p" . projectile-command-map)
+  :init (when (file-directory-p "~/Proyekty/")
+		  (setq projectile-project-search-path '(("~/Proyekty/" . 2)))))
+        (setq projectile-switch-project-action #'projectile-dired))
+
+(use-package magit)
+
+
+
 ;; Baby gets put in the corner))))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -209,7 +223,7 @@ With negative N, comment out original line and use the absolute value."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters dyalog-mode cobol-mode use-package multiple-cursors doom-modeline))))
+	(magit projectile typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters dyalog-mode cobol-mode use-package multiple-cursors doom-modeline))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
