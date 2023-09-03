@@ -14,8 +14,9 @@
 ;; You should have received a copy of the GNU General Public License along    ;;
 ;; with bungusmacs. If not, see <https://www.gnu.org/licenses/>.              ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Bungusmacs is my personal emacs configuration. You're free to use it yourself
-;; if you want, I don't care.
+;; Bungusmacs is my personal emacs configuration.
+;;
+;; Make sure to run <M-x nerd-icons-install-fonts> after installing.
 ;;
 ;; Here's the features:
 ;; - Removes the various ugly bars and tooltips.
@@ -109,7 +110,7 @@ With negative N, comment out original line and use the absolute value."
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Package system setup.                                                      ;;
+;; Library and package system setup.                                          ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Sets up package sources.
 (require 'package)
@@ -130,16 +131,19 @@ With negative N, comment out original line and use the absolute value."
 (setq use-package-always-ensure t)
 
 
+;; Additional paths to load libraries from.
+(setq load-path (cons "~/.emacs.d/mcf" load-path))
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Package configuration options.                                             ;;
+;; Library and package configuration options.                                 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package multiple-cursors
   :bind (("<C-S-up>"   . 'mc/mark-previous-like-this)
 	 ("<C-S-down>" . 'mc/mark-next-like-this)))
 
 
-;; Make sure to run M-x nerd-icons-install-fonts.
 (use-package nerd-icons)
 (use-package doom-modeline
   :ensure t
@@ -149,20 +153,20 @@ With negative N, comment out original line and use the absolute value."
   :hook (prog-mode . rainbow-delimiters-mode))
 
   
-(use-package cobol-mode)
-(setq auto-mode-alist
-      (append
-       '(("\\.[cC][oO][bB]\\'" . cobol-mode)
-         ("\\.[cC][bB][lL]\\'" . cobol-mode)
-         ("\\.[cC][pP][yY]\\'" . cobol-mode))
-       auto-mode-alist))
+(use-package cobol-mode
+  :config (setq auto-mode-alist
+		(append
+		 '(("\\.[cC][oO][bB]\\'" . cobol-mode)
+		   ("\\.[cC][bB][lL]\\'" . cobol-mode)
+		   ("\\.[cC][pP][yY]\\'" . cobol-mode))
+		 auto-mode-alist)))
 
 ;; TODO set up dyalog key combos.
-(use-package dyalog-mode)
-(setq auto-mode-alist
-      (append
-       '(("\\.apl\\'" . dyalog-mode))
-       auto-mode-alist))
+(use-package dyalog-mode
+  :config (setq auto-mode-alist
+		(append
+		 '(("\\.apl\\'" . dyalog-mode))
+		 auto-mode-alist)))
 
 (use-package haskell-mode)
 
@@ -172,7 +176,7 @@ With negative N, comment out original line and use the absolute value."
 
 (use-package typescript-mode)
 
-(load-file "mcf/mcf-mode.el")
+(load "mcf-mode")
 
 
 
