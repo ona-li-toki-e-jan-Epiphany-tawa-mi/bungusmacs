@@ -36,6 +36,8 @@
 ;; - Highlighting of trailing whitespace.
 ;; - Projectile, with C-c p as the base keybind.
 ;; - Magit, with C-c m to open magit-status.
+;; - lsp-mode, with C-c l to active and C-c l as the base keybind + C-c C-i for
+;;   a flymake project diagnostics buffer.
 ;; - Indentation set to 4 spaces, minus the following exceptions:
 ;;    > 3 spaces in cobol-mode.
 ;; - Modes for the following non-builtin languages:
@@ -176,20 +178,21 @@ With negative N, comment out original line and use the absolute value."
 					 doom-themes-enable-italic t) ; if nil, italics is universally disabled
           (load-theme 'doom-Iosvkem t))
 
+(defun bungusmacs/cobol-mode-setup ()
+  ;; Disables auto indentation and sets custom sizing.
+  (electric-indent-mode -1)
+  (setq tab-stop-list '(3 6))
+  (setq tab-width 3))
 
 (use-package cobol-mode
+  :hook (cobol-mode . bungusmacs/cobol-mode-setup)
   :config (setq auto-mode-alist
-      (append '(("\\.[cC][oO][bB]\\'" . cobol-mode)
-                ("\\.[cC][bB][lL]\\'" . cobol-mode)
-		        ("\\.[cC][pP][yY]\\'" . cobol-mode))
-   	 auto-mode-alist))
-          ;; Disables auto indentation and sets custom sizing.
-          (add-hook 'cobol-mode (lambda () (
-				(electric-indent-mode -1)
-				(setq tab-stop-list '(3 6))
-				(setq tab-width 3)))
-			 (setq cobol-tab-width 3)
-			 (setq cobol-format-style 'fixed))
+				(append '(("\\.[cC][oO][bB]\\'" . cobol-mode)
+						  ("\\.[cC][bB][lL]\\'" . cobol-mode)
+						  ("\\.[cC][pP][yY]\\'" . cobol-mode))
+   						auto-mode-alist))
+          (setq cobol-tab-width 3)
+          (setq cobol-format-style 'fixed))
 
 ;; TODO set up dyalog key combos.
 (use-package dyalog-mode
@@ -207,6 +210,23 @@ With negative N, comment out original line and use the absolute value."
 
 (load "mcf-mode")
 
+(use-package scad-mode)
+
+
+(defun bungusmacs/lsp-mode-setup ()
+  ;; Cool breadcrumb stuff at top of file.
+  (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
+  (lsp-headerline-breadcrumb-mode 1)
+  ;; Easy keybind for diagnostics buffer
+  (local-set-key (kbd "C-c C-i") #'flymake-show-project-diagnostics))
+
+(use-package lsp-mode
+  :commands (lsp lsp-deferred)
+  :init (setq lsp-keymap-prefix "C-c l")
+  :bind ("C-c l" . lsp-mode)
+  :hook (lsp-mode . bungusmacs/lsp-mode-setup)
+  :config (lsp-enable-which-key-integration t))
+
 
 
 (use-package projectile
@@ -214,11 +234,11 @@ With negative N, comment out original line and use the absolute value."
   :config (projectile-mode)
   :bind-keymap ("C-c p" . projectile-command-map)
   :init (when (file-directory-p "~/Proyekty/")
-		  (setq projectile-project-search-path '(("~/Proyekty/" . 2)))))
+		  (setq projectile-project-search-path '(("~/Proyekty/" . 2))))
         (setq projectile-switch-project-action #'projectile-dired))
 
 (use-package magit
-  :bind (("C-c m" . 'magit-status)))
+  :bind ("C-c m" . 'magit-status))
 
 
 
