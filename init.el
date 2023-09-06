@@ -28,11 +28,14 @@
 ;; - Rainbow delimiters (though they kinda hard to see fr fr.)
 ;; - Autoboot into dired on your home directory in fullscreen mode.
 ;; - C-S-SPC to mark the whole file.
-;; - C-c d to duplicate a line (thank the heavens for stackoverflow.)
+;; - C-c d to duplicate a line/selection (thank the heavens for stackoverflow.)
 ;; - Create extra cursor above/below with <C-S-up>/<C-S-down>.
 ;; - <C-S-backspace> to delete text from the current position to the start of a
 ;;   line.
+;; - Completion suggestions for keybinds.
 ;; - Highlighting of trailing whitespace.
+;; - Projectile, with C-c p as the base keybind.
+;; - Magit, with C-c m to open magit-status.
 ;; - Indentation set to 4 spaces, minus the following exceptions:
 ;;    > 3 spaces in cobol-mode.
 ;; - Modes for the following non-builtin languages:
@@ -157,6 +160,9 @@ With negative N, comment out original line and use the absolute value."
   :bind (("<C-S-up>"   . 'mc/mark-previous-like-this)
 		 ("<C-S-down>" . 'mc/mark-next-like-this)))
 
+(use-package which-key
+  :init (which-key-mode 1))
+
 
 (use-package nerd-icons)
 (use-package doom-modeline
@@ -211,7 +217,8 @@ With negative N, comment out original line and use the absolute value."
 		  (setq projectile-project-search-path '(("~/Proyekty/" . 2)))))
         (setq projectile-switch-project-action #'projectile-dired))
 
-(use-package magit)
+(use-package magit
+  :bind (("C-c m" . 'magit-status)))
 
 
 
@@ -222,8 +229,7 @@ With negative N, comment out original line and use the absolute value."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   (quote
-	(magit projectile typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters dyalog-mode cobol-mode use-package multiple-cursors doom-modeline))))
+   '(which-key-posframe which-key scad-mode lsp-mode magit projectile typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters dyalog-mode cobol-mode use-package multiple-cursors doom-modeline)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
