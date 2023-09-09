@@ -65,14 +65,6 @@
 
 (column-number-mode)
 (global-display-line-numbers-mode 1)
-;; Disables line numbers for certain major modes.
-(dolist (mode '(shell-mode-hook
-				eshell-mode-hook
-				term-mode-hook
-				dired-mode-hook
-				apropos-mode-hook
-				help-mode-hook))
-  (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 (setq display-time-default-load-average nil) ; Removes display of system load from display-time-mode
 (display-time-mode 1)
@@ -90,6 +82,19 @@
 (setq-default indent-line-function 'insert-tab)
 
 (setq-default show-trailing-whitespace t)
+
+;; Disables certain features for certain major modes.
+(dolist (mode '(shell-mode-hook
+				eshell-mode-hook
+				term-mode-hook
+				dired-mode-hook
+				apropos-mode-hook
+				help-mode-hook
+				inferior-haskell-mode))
+  (add-hook mode (lambda ()
+				   (display-line-numbers-mode 0)
+				   (setq show-trailing-whitespace nil))))
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -209,6 +214,7 @@ With negative N, comment out original line and use the absolute value."
 (use-package typescript-mode)
 
 (load "mcf-mode")
+(add-hook 'mcf-mode-hook '(electric-indent-mode -1))
 
 (use-package scad-mode)
 
