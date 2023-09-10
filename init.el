@@ -19,6 +19,7 @@
 ;; Make sure to run <M-x nerd-icons-install-fonts> after installing.
 ;;
 ;; Here's the features:
+;; - No auto-saving + excess whitespace removal on file save.
 ;; - Removes the various ugly bars and tooltips.
 ;; - Random dark theme for pleasent viewing.
 ;; - Battery level (if applicable) and time in mode line.
@@ -90,10 +91,14 @@
 				dired-mode-hook
 				apropos-mode-hook
 				help-mode-hook
-				inferior-haskell-mode))
+				inferior-haskell-mode-hook))
   (add-hook mode (lambda ()
 				   (display-line-numbers-mode 0)
 				   (setq show-trailing-whitespace nil))))
+
+(setq make-backup-files nil)
+;; Automatically removes excess whitespace before saving.
+(add-hook 'before-save-hook 'whitespace-cleanup)
 
 
 
@@ -110,21 +115,21 @@ With argument N, make N copies.
 With negative N, comment out original line and use the absolute value."
   (interactive "*p")
   (let ((use-region (use-region-p)))
-    (save-excursion
-      (let ((text (if use-region        ;Get region if active, otherwise line
-                      (buffer-substring (region-beginning) (region-end))
-                    (prog1 (thing-at-point 'line)
-                      (end-of-line)
-                      (if (< 0 (forward-line 1)) ;Go to beginning of next line, or make a new one
-                          (newline))))))
-        (dotimes (i (abs (or n 1)))     ;Insert N times, or once if not specified
-          (insert text))))
-    (if use-region nil                  ;Only if we're working with a line (not a region)
-      (let ((pos (- (point) (line-beginning-position)))) ;Save column
-        (if (> 0 n)                             ;Comment out original with negative arg
-            (comment-region (line-beginning-position) (line-end-position)))
-        (forward-line 1)
-        (forward-char pos)))))
+	(save-excursion
+	  (let ((text (if use-region        ;Get region if active, otherwise line
+					  (buffer-substring (region-beginning) (region-end))
+					(prog1 (thing-at-point 'line)
+					  (end-of-line)
+					  (if (< 0 (forward-line 1)) ;Go to beginning of next line, or make a new one
+						  (newline))))))
+		(dotimes (i (abs (or n 1)))     ;Insert N times, or once if not specified
+		  (insert text))))
+	(if use-region nil                  ;Only if we're working with a line (not a region)
+	  (let ((pos (- (point) (line-beginning-position)))) ;Save column
+		(if (> 0 n)                             ;Comment out original with negative arg
+			(comment-region (line-beginning-position) (line-end-position)))
+		(forward-line 1)
+		(forward-char pos)))))
 (global-set-key (kbd "C-c d") 'duplicate-line-or-region)
 
 (fset 'delete-from-here-to-start-of-line
@@ -180,8 +185,8 @@ With negative N, comment out original line and use the absolute value."
 
 (use-package doom-themes
   :config (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-					 doom-themes-enable-italic t) ; if nil, italics is universally disabled
-          (load-theme 'doom-Iosvkem t))
+				doom-themes-enable-italic t) ; if nil, italics is universally disabled
+		  (load-theme 'doom-Iosvkem t))
 
 (defun bungusmacs/cobol-mode-setup ()
   ;; Disables auto indentation and sets custom sizing.
@@ -195,9 +200,9 @@ With negative N, comment out original line and use the absolute value."
 				(append '(("\\.[cC][oO][bB]\\'" . cobol-mode)
 						  ("\\.[cC][bB][lL]\\'" . cobol-mode)
 						  ("\\.[cC][pP][yY]\\'" . cobol-mode))
-   						auto-mode-alist))
-          (setq cobol-tab-width 3)
-          (setq cobol-format-style 'fixed))
+						auto-mode-alist))
+		  (setq cobol-tab-width 3)
+		  (setq cobol-format-style 'fixed))
 
 ;; TODO set up dyalog key combos.
 (use-package dyalog-mode
@@ -217,6 +222,8 @@ With negative N, comment out original line and use the absolute value."
 (add-hook 'mcf-mode-hook '(electric-indent-mode -1))
 
 (use-package scad-mode)
+
+(use-package cmake-mode)
 
 
 (defun bungusmacs/lsp-mode-setup ()
@@ -241,7 +248,7 @@ With negative N, comment out original line and use the absolute value."
   :bind-keymap ("C-c p" . projectile-command-map)
   :init (when (file-directory-p "~/Proyekty/")
 		  (setq projectile-project-search-path '(("~/Proyekty/" . 2))))
-        (setq projectile-switch-project-action #'projectile-dired))
+		(setq projectile-switch-project-action #'projectile-dired))
 
 (use-package magit
   :bind ("C-c m" . 'magit-status))
@@ -255,7 +262,7 @@ With negative N, comment out original line and use the absolute value."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(which-key-posframe which-key scad-mode lsp-mode magit projectile typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters dyalog-mode cobol-mode use-package multiple-cursors doom-modeline)))
+   '(cmake-mode which-key-posframe which-key scad-mode lsp-mode magit projectile typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters dyalog-mode cobol-mode use-package multiple-cursors doom-modeline)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
