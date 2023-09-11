@@ -39,6 +39,7 @@
 ;; - Magit, with C-c m to open magit-status.
 ;; - lsp-mode, with C-c l to active and C-c l as the base keybind + C-c C-i for
 ;;   a flymake project diagnostics buffer.
+;; - Autocompletion.
 ;; - Indentation set to 4 spaces, minus the following exceptions:
 ;;    > 3 spaces in cobol-mode.
 ;; - Modes for the following non-builtin languages:
@@ -240,6 +241,17 @@ With negative N, comment out original line and use the absolute value."
   :hook (lsp-mode . bungusmacs/lsp-mode-setup)
   :config (lsp-enable-which-key-integration t))
 
+(use-package lsp-ui
+  :hook (lsp-mode . lsp-ui-mode))
+
+
+(use-package company
+  :hook (prog-mode . company-mode)
+  :bind (:map company-active-map
+			  ("<tab>" . company-complete-suggestion))
+  :custom (company-custom-prefix-length 1)
+		  (company-idle-delay 0.0))
+
 
 
 (use-package projectile
@@ -262,7 +274,7 @@ With negative N, comment out original line and use the absolute value."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(cmake-mode which-key-posframe which-key scad-mode lsp-mode magit projectile typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters dyalog-mode cobol-mode use-package multiple-cursors doom-modeline)))
+   '(lsp-ui company cmake-mode which-key-posframe which-key scad-mode lsp-mode magit projectile typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters dyalog-mode cobol-mode use-package multiple-cursors doom-modeline)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
