@@ -100,8 +100,7 @@
 (setq make-backup-files nil)
 ;; Automatically removes excess whitespace before saving.
 (add-hook 'before-save-hook 'whitespace-cleanup)
-
-
+(setq-default indent-tabs-mode nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Non-package keybinds.                                                      ;;
