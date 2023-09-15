@@ -23,7 +23,6 @@
 ;; - Removes the various ugly bars and tooltips.
 ;; - Random dark theme for pleasent viewing.
 ;; - Battery level (if applicable) and time in mode line.
-;; - Sexy doom mode line.
 ;; - Line numbers except where they do not belong (if I notice, that is) +
 ;;   column numbers.
 ;; - Rainbow delimiters (though they kinda hard to see fr fr.)
@@ -38,7 +37,7 @@
 ;; - Projectile, with C-c p as the base keybind.
 ;; - Magit, with C-c m to open magit-status.
 ;; - lsp-mode, with C-c l to active and C-c l as the base keybind + C-c C-i for
-;;   a flymake project diagnostics buffer.
+;;   a flymake buffer diagnostics buffer.
 ;; - Autocompletion.
 ;; - Indentation set to 4 spaces, minus the following exceptions:
 ;;    > 3 spaces in cobol-mode.
@@ -82,25 +81,29 @@
 (setq-default tab-stop-list '(4 8))
 (setq-default tab-width 4)
 (setq-default indent-line-function 'insert-tab)
+(setq-default indent-tabs-mode nil)
+;; Special sauce for c++
+(setq c-set-style "k&r")
+(setq c-basic-offset 4)
 
 (setq-default show-trailing-whitespace t)
 
 ;; Disables certain features for certain major modes.
 (dolist (mode '(shell-mode-hook
-				eshell-mode-hook
-				term-mode-hook
-				dired-mode-hook
-				apropos-mode-hook
-				help-mode-hook
-				inferior-haskell-mode-hook))
+                eshell-mode-hook
+                term-mode-hook
+                dired-mode-hook
+                apropos-mode-hook
+                help-mode-hook
+                inferior-haskell-mode-hook
+                inferior-python-mode-hook))
   (add-hook mode (lambda ()
-				   (display-line-numbers-mode 0)
-				   (setq show-trailing-whitespace nil))))
+                   (display-line-numbers-mode 0)
+                   (setq show-trailing-whitespace nil))))
 
 (setq make-backup-files nil)
 ;; Automatically removes excess whitespace before saving.
 (add-hook 'before-save-hook 'whitespace-cleanup)
-(setq-default indent-tabs-mode nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Non-package keybinds.                                                      ;;
@@ -115,21 +118,21 @@ With argument N, make N copies.
 With negative N, comment out original line and use the absolute value."
   (interactive "*p")
   (let ((use-region (use-region-p)))
-	(save-excursion
-	  (let ((text (if use-region        ;Get region if active, otherwise line
-					  (buffer-substring (region-beginning) (region-end))
-					(prog1 (thing-at-point 'line)
-					  (end-of-line)
-					  (if (< 0 (forward-line 1)) ;Go to beginning of next line, or make a new one
-						  (newline))))))
-		(dotimes (i (abs (or n 1)))     ;Insert N times, or once if not specified
-		  (insert text))))
-	(if use-region nil                  ;Only if we're working with a line (not a region)
-	  (let ((pos (- (point) (line-beginning-position)))) ;Save column
-		(if (> 0 n)                             ;Comment out original with negative arg
-			(comment-region (line-beginning-position) (line-end-position)))
-		(forward-line 1)
-		(forward-char pos)))))
+    (save-excursion
+      (let ((text (if use-region        ;Get region if active, otherwise line
+                      (buffer-substring (region-beginning) (region-end))
+                    (prog1 (thing-at-point 'line)
+                      (end-of-line)
+                      (if (< 0 (forward-line 1)) ;Go to beginning of next line, or make a new one
+                          (newline))))))
+        (dotimes (i (abs (or n 1)))     ;Insert N times, or once if not specified
+          (insert text))))
+    (if use-region nil                  ;Only if we're working with a line (not a region)
+      (let ((pos (- (point) (line-beginning-position)))) ;Save column
+        (if (> 0 n)                             ;Comment out original with negative arg
+            (comment-region (line-beginning-position) (line-end-position)))
+        (forward-line 1)
+        (forward-char pos)))))
 (global-set-key (kbd "C-c d") 'duplicate-line-or-region)
 
 (fset 'delete-from-here-to-start-of-line
@@ -145,7 +148,7 @@ With negative N, comment out original line and use the absolute value."
 (require 'package)
 
 (dolist (package '(("melpa" . "https://melpa.org/packages/")))
-		   ;;("nongnu-elpa"  . "https://elpa.nongnu.org/nongnu/")))
+           ;;("nongnu-elpa"  . "https://elpa.nongnu.org/nongnu/")))
   (add-to-list 'package-archives package t))
 
 ;; Initializes the package system.
@@ -170,23 +173,22 @@ With negative N, comment out original line and use the absolute value."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package multiple-cursors
   :bind (("<C-S-up>"   . 'mc/mark-previous-like-this)
-		 ("<C-S-down>" . 'mc/mark-next-like-this)))
+         ("<C-S-down>" . 'mc/mark-next-like-this)))
 
 (use-package which-key
   :init (which-key-mode 1))
 
 
-(use-package nerd-icons)
-(use-package doom-modeline
-  :init (doom-modeline-mode 1))
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package doom-themes
   :config (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-				doom-themes-enable-italic t) ; if nil, italics is universally disabled
-		  (load-theme 'doom-Iosvkem t))
+                doom-themes-enable-italic t) ; if nil, italics is universally disabled
+          (load-theme 'doom-Iosvkem t))
+
+
 
 (defun bungusmacs/cobol-mode-setup ()
   ;; Disables auto indentation and sets custom sizing.
@@ -197,18 +199,18 @@ With negative N, comment out original line and use the absolute value."
 (use-package cobol-mode
   :hook (cobol-mode . bungusmacs/cobol-mode-setup)
   :config (setq auto-mode-alist
-				(append '(("\\.[cC][oO][bB]\\'" . cobol-mode)
-						  ("\\.[cC][bB][lL]\\'" . cobol-mode)
-						  ("\\.[cC][pP][yY]\\'" . cobol-mode))
-						auto-mode-alist))
-		  (setq cobol-tab-width 3)
-		  (setq cobol-format-style 'fixed))
+                (append '(("\\.[cC][oO][bB]\\'" . cobol-mode)
+                          ("\\.[cC][bB][lL]\\'" . cobol-mode)
+                          ("\\.[cC][pP][yY]\\'" . cobol-mode))
+                        auto-mode-alist))
+          (setq cobol-tab-width 3)
+          (setq cobol-format-style 'fixed))
 
 ;; TODO set up dyalog key combos.
 (use-package dyalog-mode
   :config (setq auto-mode-alist
-		(append '(("\\.apl\\'" . dyalog-mode))
-		 auto-mode-alist)))
+        (append '(("\\.apl\\'" . dyalog-mode))
+         auto-mode-alist)))
 
 (use-package haskell-mode)
 
@@ -231,7 +233,7 @@ With negative N, comment out original line and use the absolute value."
   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
   (lsp-headerline-breadcrumb-mode 1)
   ;; Easy keybind for diagnostics buffer
-  (local-set-key (kbd "C-c C-i") #'flymake-show-project-diagnostics))
+  (local-set-key (kbd "C-c C-i") #'flymake-show-buffer-diagnostics))
 
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
@@ -247,9 +249,9 @@ With negative N, comment out original line and use the absolute value."
 (use-package company
   :hook (prog-mode . company-mode)
   :bind (:map company-active-map
-			  ("<tab>" . company-complete-suggestion))
+              ("<tab>" . company-complete-suggestion))
   :custom (company-custom-prefix-length 1)
-		  (company-idle-delay 0.0))
+          (company-idle-delay 0.0))
 
 
 
@@ -258,8 +260,8 @@ With negative N, comment out original line and use the absolute value."
   :config (projectile-mode)
   :bind-keymap ("C-c p" . projectile-command-map)
   :init (when (file-directory-p "~/Proyekty/")
-		  (setq projectile-project-search-path '(("~/Proyekty/" . 2))))
-		(setq projectile-switch-project-action #'projectile-dired))
+          (setq projectile-project-search-path '(("~/Proyekty/" . 2))))
+        (setq projectile-switch-project-action #'projectile-dired))
 
 (use-package magit
   :bind ("C-c m" . 'magit-status))
