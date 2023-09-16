@@ -21,6 +21,7 @@
 ;; - Removes the various ugly bars and tooltips.
 ;; - Random dark theme for pleasent viewing.
 ;; - Battery level (if applicable) and time in mode line.
+;; - Sexy doom mode line (if in graphical mode.)
 ;; - Line numbers except where they do not belong (if I notice, that is) +
 ;;   column numbers.
 ;; - Rainbow delimiters (though they kinda hard to see fr fr.)
@@ -157,7 +158,7 @@ With negative N, comment out original line and use the absolute value."
 
 
 ;; Local-elisp-file load path.
-(setq load-path (cons "~/.emacs.d/mcf" load-path))
+(add-to-list 'load-path "~/.emacs.d/mcf")
 
 
 
@@ -175,6 +176,11 @@ With negative N, comment out original line and use the absolute value."
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
+
+(use-package nerd-icons)
+(use-package doom-modeline
+  :init (when (display-graphic-p)
+          (doom-modeline-mode 1)))
 
 (use-package doom-themes
   :custom (doom-themes-enable-bold t)
@@ -235,6 +241,8 @@ With negative N, comment out original line and use the absolute value."
 
 (use-package lsp-ui
   :hook (lsp-mode . lsp-ui-mode))
+
+
 
 (use-package company
   :hook (prog-mode . company-mode)
