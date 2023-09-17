@@ -14,9 +14,18 @@
 ;; You should have received a copy of the GNU General Public License along    ;;
 ;; with bungusmacs. If not, see <https://www.gnu.org/licenses/>.              ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; Bungusmacs is my personal emacs configuration.
 ;;
+;; Make sure to run <M-x nerd-icons-install-fonts> after installing.
+;;
+;; NOTE: The garbage collector is set to not run until 80 MB of memory usage
+;; during startup and switches to 2 MB afterwards (+ additionaly memory whilst
+;; not idle thanks to gcmh.)
+;;
 ;; Here's the features:
+;; - Garbage collector tweaking (manually + with gcmh) to speed up Emacs at the
+;;   cost of memory usage.
 ;; - No auto-saving + excess whitespace removal on file save.
 ;; - Removes the various ugly bars and tooltips.
 ;; - Random dark theme for pleasent viewing.
@@ -50,7 +59,11 @@
 ;;    > BASIC.
 ;;
 ;; Author: ona li toki e jan Epiphany tawa mi.
-;;
+
+
+
+;; Temporarily sets garbage collector threshold high to speed up startup times.
+(setq gc-cons-threshold (* 80 1000 1000)) ; 80 MB.
 
 
 
@@ -166,10 +179,12 @@ With negative N, comment out original line and use the absolute value."
 ;; Library and package configuration options.                                 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package multiple-cursors
-  :bind ("<C-S-up>"   . #'mc/mark-previous-like-this)
-        ("<C-S-down>" . #'mc/mark-next-like-this))
+  :defer
+  :bind ("<C-S-up>"   . mc/mark-previous-like-this)
+        ("<C-S-down>" . mc/mark-next-like-this))
 
 (use-package which-key
+  :defer 0
   :config (which-key-mode 1))
 
 
@@ -177,10 +192,12 @@ With negative N, comment out original line and use the absolute value."
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
-(use-package nerd-icons)
-(use-package doom-modeline
-  :init (when (display-graphic-p)
-          (doom-modeline-mode 1)))
+; Nerd-icons doesn't work right in a terminal.
+(when (display-graphic-p)
+  (use-package nerd-icons)
+  (use-package doom-modeline
+    :after nerd-icons
+    :init (doom-modeline-mode 1)))
 
 (use-package doom-themes
   :custom (doom-themes-enable-bold t)
@@ -205,23 +222,46 @@ With negative N, comment out original line and use the absolute value."
 (use-package dyalog-mode
   :mode "\\.apl\\'")
 
-(use-package haskell-mode)
+(use-package haskell-mode
+  ; The value(s) for :mode and :interpreter were pulled from haskell-mode.el to
+  ; defer startup.
+  :mode ("\\.[gh]s\\'"
+         "\\.hsig\\'"
+         "\\.l[gh]s\\'"
+         "\\.hsc\\'")
+  :interpreter ("runghc"
+                "runhaskell"))
 
-(use-package arduino-mode)
+(use-package arduino-mode
+  ; The value(s) for :mode was pulled from arduino-mode.el to defer startup.
+  :mode ("\\.pde\\'"
+         "\\.ino\\'"))
 
-(use-package basic-mode)
+(use-package basic-mode
+  :mode "\\.bas\\'")
 
-(use-package typescript-mode)
+(use-package typescript-mode
+  ; The value(s) for :mode was pulled from typescript-mode.el to defer startup.
+  :mode "\\.tsx?\\'")
 
-(require 'mcf-mode)
 (defun bungusmacs/mcf-mode-setup ()
   "Runs various setup functions for mcf-mode."
   (electric-indent-mode -1))
-(add-hook 'mcf-mode-hook #'bungusmacs/mcf-mode-setup)
+(use-package mcf-mode
+  :load-path "mcf-mode.el"
+  :hook (mcf-mode-hook . bungusmacs/mcf-mode-setup)
+  ; The value(s) for :mode was pulled from mcf-mode.el to defer startup.
+  :mode "\\.mcfunction\\'")
 
-(use-package scad-mode)
+(use-package scad-mode
+  ; The value(s) for :mode was pulled from scad-mode.el to defer startup.
+  :mode "\\.scad\\'")
 
-(use-package cmake-mode)
+(use-package cmake-mode
+  ; The value(s) for :mode was pulled from cmake-mode.el to defer startup.
+  :mode ("CMakeLists\\.txt\\'"
+         "\\.cmake\\'"))
+
 
 
 (defun bungusmacs/lsp-mode-setup ()
@@ -233,13 +273,13 @@ With negative N, comment out original line and use the absolute value."
   (local-set-key (kbd "C-c C-i") #'flymake-show-buffer-diagnostics))
 
 (use-package lsp-mode
-  :commands (lsp lsp-deferred)
   :custom (lsp-keymap-prefix "C-c l")
   :bind ("C-c l" . lsp-mode)
   :hook (lsp-mode . bungusmacs/lsp-mode-setup)
   :config (lsp-enable-which-key-integration t))
 
 (use-package lsp-ui
+  :after lsp-mode
   :hook (lsp-mode . lsp-ui-mode))
 
 
@@ -258,6 +298,8 @@ With negative N, comment out original line and use the absolute value."
   :custom (projectile-project-search-path '(("~/Proyekty/" . 2)))
           (projectile-switch-project-action #'projectile-dired))
 
+
+
 (use-package magit
   :bind ("C-c m" . magit-status))
 
@@ -270,10 +312,21 @@ With negative N, comment out original line and use the absolute value."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(mcf/mcf-mode lsp-ui company cmake-mode which-key-posframe which-key scad-mode lsp-mode magit projectile typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters dyalog-mode cobol-mode use-package multiple-cursors doom-modeline)))
+   '(mcf-mode gcmh mcf/mcf-mode lsp-ui company cmake-mode which-key-posframe which-key scad-mode lsp-mode magit projectile typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters dyalog-mode cobol-mode use-package multiple-cursors doom-modeline)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+
+
+(use-package gcmh
+  :defer 0
+  :custom (gcmh-low-cons-threshold (* 2 1000 1000)) ; 2 MB.
+  :config (gcmh-mode 1))
+
+;; Resets the garbage collector threshold so that emacs' memory usage doesn't
+;; explode whilst running.
+(setq gc-cons-threshold (* 2 1000 1000)) ; 2 MB.
