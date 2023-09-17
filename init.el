@@ -19,8 +19,8 @@
 ;;
 ;; Make sure to run <M-x nerd-icons-install-fonts> after installing.
 ;;
-;; NOTE: The garbage collector is set to not run until 80 MB of memory usage
-;; during startup and switches to 2 MB afterwards (+ additionaly memory whilst
+;; NOTE: The garbage collector is set to not run until 100 MB of memory usage
+;; during startup and switches to 1 MB afterwards (+ additionaly memory whilst
 ;; not idle thanks to gcmh.)
 ;;
 ;; Here's the features:
@@ -57,13 +57,14 @@
 ;;    > COBOL.
 ;;    > APL.
 ;;    > BASIC.
+;; - Displays startup time on startup.
 ;;
 ;; Author: ona li toki e jan Epiphany tawa mi.
 
 
 
 ;; Temporarily sets garbage collector threshold high to speed up startup times.
-(setq gc-cons-threshold (* 80 1000 1000)) ; 80 MB.
+(setq gc-cons-threshold (* 100 1000 1000)) ; 100 MB.
 
 
 
@@ -109,6 +110,12 @@
 
 ;; Automatically removes excess whitespace before saving.
 (add-hook 'before-save-hook #'whitespace-cleanup)
+
+(defun bungusmacs/display-startup-time ()
+  (message "Emacs loaded in %s seconds with %d garbage collections."
+           (emacs-init-time "%.2f")
+           gcs-done))
+(add-hook 'emacs-startup-hook #'bungusmacs/display-startup-time)
 
 
 
@@ -324,9 +331,9 @@ With negative N, comment out original line and use the absolute value."
 
 (use-package gcmh
   :defer 0
-  :custom (gcmh-low-cons-threshold (* 2 1000 1000)) ; 2 MB.
+  :custom (gcmh-low-cons-threshold (* 1 1000 1000)) ; 1 MB.
   :config (gcmh-mode 1))
 
 ;; Resets the garbage collector threshold so that emacs' memory usage doesn't
 ;; explode whilst running.
-(setq gc-cons-threshold (* 2 1000 1000)) ; 2 MB.
+(setq gc-cons-threshold (* 1 1000 1000)) ; 1 MB.
