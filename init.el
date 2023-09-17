@@ -255,7 +255,8 @@ With negative N, comment out original line and use the absolute value."
 (use-package projectile
   :config (projectile-mode)
   :bind-keymap ("C-c p" . projectile-command-map)
-  :custom (projectile-project-search-path '(("~/Proyekty/" . 2))))
+  :custom (projectile-project-search-path '(("~/Proyekty/" . 2)))
+          (projectile-switch-project-action #'projectile-dired))
 
 (use-package magit
   :bind ("C-c m" . magit-status))
