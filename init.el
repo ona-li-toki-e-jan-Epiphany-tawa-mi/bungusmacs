@@ -20,12 +20,10 @@
 ;; Make sure to run <M-x nerd-icons-install-fonts> after installing.
 ;;
 ;; NOTE: The garbage collector is set to not run until 100 MB of memory usage
-;; during startup and switches to 1 MB afterwards (+ additional memory whilst
-;; not idle thanks to gcmh.)
+;; during startup and switches to 1 MB afterwards.
 ;;
 ;; Here's the features:
-;; - Garbage collector tweaking (manually + with gcmh) to speed up Emacs at the
-;;   cost of memory usage.
+;; - Garbage collector tweaking to speed up Emacs at the cost of memory usage.
 ;; - No auto-saving + excess whitespace removal on file save.
 ;; - Removes the various ugly bars and tooltips.
 ;; - Random dark theme for pleasent viewing.
@@ -318,7 +316,7 @@ With negative N, comment out original line and use the absolute value."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(mcf-mode gcmh mcf/mcf-mode lsp-ui company cmake-mode which-key-posframe which-key scad-mode lsp-mode magit projectile typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters dyalog-mode cobol-mode use-package multiple-cursors doom-modeline)))
+   '(mcf-mode mcf/mcf-mode lsp-ui company cmake-mode which-key-posframe which-key scad-mode lsp-mode magit projectile typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters dyalog-mode cobol-mode use-package multiple-cursors doom-modeline)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -327,11 +325,6 @@ With negative N, comment out original line and use the absolute value."
  )
 
 
-
-(use-package gcmh
-  :defer 0
-  :custom (gcmh-low-cons-threshold (* 1 1000 1000)) ; 1 MB.
-  :config (gcmh-mode 1))
 
 ;; Resets the garbage collector threshold so that emacs' memory usage doesn't
 ;; explode whilst running.
