@@ -20,7 +20,7 @@
 ;; Make sure to run <M-x nerd-icons-install-fonts> after installing.
 ;;
 ;; NOTE: The garbage collector is set to not run until 100 MB of memory usage
-;; during startup and switches to 1 MB afterwards (+ additionaly memory whilst
+;; during startup and switches to 1 MB afterwards (+ additional memory whilst
 ;; not idle thanks to gcmh.)
 ;;
 ;; Here's the features:
@@ -29,10 +29,9 @@
 ;; - No auto-saving + excess whitespace removal on file save.
 ;; - Removes the various ugly bars and tooltips.
 ;; - Random dark theme for pleasent viewing.
-;; - Battery level (if applicable) and time in mode line.
+;; - Battery level (if applicable), time, and columns in mode line.
 ;; - Sexy doom mode line (if in graphical mode.)
-;; - Line numbers except where they do not belong (if I notice, that is) +
-;;   column numbers.
+;; - Line numbers in prog-mode.
 ;; - Rainbow delimiters (though they kinda hard to see fr fr.)
 ;; - Autoboot into dired on your home directory in fullscreen mode.
 ;; - C-S-SPC to mark the whole file.
@@ -53,7 +52,7 @@
 ;;    > Haskell.
 ;;    > Typescript.
 ;;    > Arduino-C++.
-;;    > Minecraft function files (the command language.)
+;;    > Minecraft functions (the command language.)
 ;;    > COBOL.
 ;;    > APL.
 ;;    > BASIC.
