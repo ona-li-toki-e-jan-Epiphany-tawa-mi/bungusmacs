@@ -27,6 +27,7 @@
 ;; - No auto-saving + excess whitespace removal on file save.
 ;; - Removes the various ugly bars and tooltips.
 ;; - Random dark theme for pleasent viewing.
+;; - TODO (and similiar) highlighting.
 ;; - Battery level (if applicable), time, and columns in mode line.
 ;; - Sexy doom mode line (if in graphical mode.)
 ;; - Line numbers in prog-mode.
@@ -54,6 +55,8 @@
 ;;    > COBOL.
 ;;    > APL.
 ;;    > BASIC.
+;;    > OpenSCAD.
+;;    > CMake.
 ;; - Displays startup time on startup.
 ;;
 ;; Author: ona li toki e jan Epiphany tawa mi.
@@ -208,6 +211,9 @@ With negative N, comment out original line and use the absolute value."
           (doom-themes-enable-italic t)
   :config (load-theme 'doom-Iosvkem t))
 
+(use-package hl-todo
+  :hook (prog-mode . hl-todo-mode))
+
 
 
 (defun bungusmacs/cobol-mode-setup ()
@@ -222,9 +228,10 @@ With negative N, comment out original line and use the absolute value."
          "\\.[cC][pP][yY]\\'")
   :init (setq cobol-tab-width 3))
 
-;; TODO set up dyalog key combos.
-(use-package dyalog-mode
-  :mode "\\.apl\\'")
+(use-package gnu-apl-mode
+  :mode "\\.apl\\'"
+  :interpreter "apl"
+  :custom (gnu-apl-key-prefix 96))
 
 (use-package haskell-mode
   ; The value(s) for :mode and :interpreter were pulled from haskell-mode.el to
@@ -316,7 +323,7 @@ With negative N, comment out original line and use the absolute value."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(mcf-mode mcf/mcf-mode lsp-ui company cmake-mode which-key-posframe which-key scad-mode lsp-mode magit projectile typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters dyalog-mode cobol-mode use-package multiple-cursors doom-modeline)))
+   '(gnu-apl-mode hl-todo mcf-mode mcf/mcf-mode lsp-ui company cmake-mode which-key-posframe which-key scad-mode lsp-mode magit projectile typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters cobol-mode use-package multiple-cursors doom-modeline)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
