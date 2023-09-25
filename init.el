@@ -117,6 +117,10 @@
            gcs-done))
 (add-hook 'emacs-startup-hook #'bungusmacs/display-startup-time)
 
+;; Updates Emacs' PATH Variables.
+(setenv "PATH" (concat (getenv "PATH") ":~/.local/bin"))
+(add-to-list 'exec-path "~/.local/bin")
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
