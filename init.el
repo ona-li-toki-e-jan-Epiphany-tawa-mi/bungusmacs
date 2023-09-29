@@ -57,6 +57,7 @@
 ;;    > BASIC.
 ;;    > OpenSCAD.
 ;;    > CMake.
+;;    > FASM.
 ;; - Displays startup time on startup.
 ;;
 ;; Author: ona li toki e jan Epiphany tawa mi.
@@ -183,6 +184,7 @@ With negative N, comment out original line and use the absolute value."
 
 ;; Local-elisp-file load path.
 (add-to-list 'load-path "~/.emacs.d/mcf")
+(add-to-list 'load-path "~/.emacs.d/fasm")
 
 
 
@@ -277,6 +279,9 @@ With negative N, comment out original line and use the absolute value."
   :mode ("CMakeLists\\.txt\\'"
          "\\.cmake\\'"))
 
+(use-package fasm-mode
+  :load-path "fasm-mode.el"
+  :hook (asm-mode . fasm-mode))
 
 
 (defun bungusmacs/lsp-mode-setup ()
