@@ -31,6 +31,7 @@
 ;; - Battery level (if applicable), time, and columns in mode line.
 ;; - Sexy doom mode line (if in graphical mode.)
 ;; - Line numbers in prog-mode.
+;; - Automatic import of enviroment variables from .bashrc or similar.
 ;; - Rainbow delimiters (though they kinda hard to see fr fr.)
 ;; - Autoboot into dired on your home directory in fullscreen mode.
 ;; - C-S-SPC to mark the whole file.
@@ -38,14 +39,14 @@
 ;; - Create extra cursor above/below with <C-S-up>/<C-S-down>.
 ;; - <C-S-backspace> to delete text from the current position to the start of a
 ;;   line.
-;; - Completion suggestions for keybinds.
+;; - Completion suggestions for keybinds with which-key.
 ;; - Highlighting of trailing whitespace.
 ;; - Projectile, with C-c p as the base keybind.
 ;; - Magit, with C-c m to open magit-status.
 ;; - lsp-mode, with C-c l to activate + automatically runs in prog-mode, C-c l
 ;;   as the base keybind, and C-c C-i for a flymake buffer diagnostics buffer.
 ;;   Flycheck is added for better integration with lsp-ui.
-;; - Autocompletion.
+;; - Autocompletion with company.
 ;; - Indentation set to 4 spaces, minus the following exceptions:
 ;;    > 3 spaces in cobol-mode.
 ;; - Modes for the following non-builtin languages:
@@ -120,10 +121,6 @@
            gcs-done))
 (add-hook 'emacs-startup-hook #'bungusmacs/display-startup-time)
 
-;; Updates Emacs' PATH Variables.
-(setenv "PATH" (concat (getenv "PATH") ":~/.local/bin"))
-(add-to-list 'exec-path "~/.local/bin")
-
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -193,6 +190,13 @@ With negative N, comment out original line and use the absolute value."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library and package configuration options.                                 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Ensures enviroment variables are avalible from .bashrc or similar.
+(use-package exec-path-from-shell
+  :config (when (memq window-system '(mac ns x))
+            (exec-path-from-shell-initialize)))
+
+
+
 (use-package multiple-cursors
   :defer
   :bind ("<C-S-up>"   . mc/mark-previous-like-this)
@@ -301,6 +305,8 @@ With negative N, comment out original line and use the absolute value."
 
 (use-package lsp-mode
   :custom (lsp-keymap-prefix "C-c l")
+          (lsp-warn-no-matched-clients nil) ; prevents warnings if a language
+                                            ; server is not avalible.
   :bind ("C-c l" . lsp-mode)
   :hook (prog-mode . lsp-mode)
         (lsp-mode . bungusmacs/lsp-mode-setup)
@@ -343,7 +349,7 @@ With negative N, comment out original line and use the absolute value."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(flycheck rust-mode gnu-apl-mode hl-todo mcf-mode mcf/mcf-mode lsp-ui company cmake-mode which-key-posframe which-key scad-mode lsp-mode magit projectile typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters cobol-mode use-package multiple-cursors doom-modeline)))
+   '(exec-path-from-shell flycheck rust-mode gnu-apl-mode hl-todo mcf-mode mcf/mcf-mode lsp-ui company cmake-mode which-key-posframe which-key scad-mode lsp-mode magit projectile typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters cobol-mode use-package multiple-cursors doom-modeline)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
