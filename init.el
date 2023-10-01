@@ -43,7 +43,8 @@
 ;; - Projectile, with C-c p as the base keybind.
 ;; - Magit, with C-c m to open magit-status.
 ;; - lsp-mode, with C-c l to activate + automatically runs in prog-mode, C-c l
-;;   as the base keybind,and C-c C-i for a flymake buffer diagnostics buffer.
+;;   as the base keybind, and C-c C-i for a flymake buffer diagnostics buffer.
+;;   Flycheck is added for better integration with lsp-ui.
 ;; - Autocompletion.
 ;; - Indentation set to 4 spaces, minus the following exceptions:
 ;;    > 3 spaces in cobol-mode.
@@ -309,6 +310,9 @@ With negative N, comment out original line and use the absolute value."
   :after lsp-mode
   :hook (lsp-mode . lsp-ui-mode))
 
+(use-package flycheck
+  :after lsp-mode)
+
 
 
 (use-package company
@@ -339,7 +343,7 @@ With negative N, comment out original line and use the absolute value."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(rust-mode gnu-apl-mode hl-todo mcf-mode mcf/mcf-mode lsp-ui company cmake-mode which-key-posframe which-key scad-mode lsp-mode magit projectile typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters cobol-mode use-package multiple-cursors doom-modeline)))
+   '(flycheck rust-mode gnu-apl-mode hl-todo mcf-mode mcf/mcf-mode lsp-ui company cmake-mode which-key-posframe which-key scad-mode lsp-mode magit projectile typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters cobol-mode use-package multiple-cursors doom-modeline)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
