@@ -42,8 +42,8 @@
 ;; - Highlighting of trailing whitespace.
 ;; - Projectile, with C-c p as the base keybind.
 ;; - Magit, with C-c m to open magit-status.
-;; - lsp-mode, with C-c l to active and C-c l as the base keybind + C-c C-i for
-;;   a flymake buffer diagnostics buffer.
+;; - lsp-mode, with C-c l to activate + automatically runs in prog-mode, C-c l
+;;   as the base keybind,and C-c C-i for a flymake buffer diagnostics buffer.
 ;; - Autocompletion.
 ;; - Indentation set to 4 spaces, minus the following exceptions:
 ;;    > 3 spaces in cobol-mode.
@@ -58,6 +58,7 @@
 ;;    > OpenSCAD.
 ;;    > CMake.
 ;;    > FASM.
+;;    > Rust.
 ;; - Displays startup time on startup.
 ;;
 ;; Author: ona li toki e jan Epiphany tawa mi.
@@ -235,6 +236,8 @@ With negative N, comment out original line and use the absolute value."
   :init (setq cobol-tab-width 3))
 
 (use-package gnu-apl-mode
+  ; The value(s) for :mode and :interpreter were pulled from haskell-mode.el to
+  ; defer startup.
   :mode "\\.apl\\'"
   :interpreter "apl"
   :custom (gnu-apl-key-prefix 96))
@@ -281,7 +284,10 @@ With negative N, comment out original line and use the absolute value."
 
 (use-package fasm-mode
   :load-path "fasm-mode.el"
-  :hook (asm-mode . fasm-mode))
+  :hook (asm-mode . fasm-mode)) ; makes fasm-mode the default for .asm files.
+
+(use-package rust-mode
+  :mode "\\.rs\\'")
 
 
 (defun bungusmacs/lsp-mode-setup ()
@@ -295,7 +301,8 @@ With negative N, comment out original line and use the absolute value."
 (use-package lsp-mode
   :custom (lsp-keymap-prefix "C-c l")
   :bind ("C-c l" . lsp-mode)
-  :hook (lsp-mode . bungusmacs/lsp-mode-setup)
+  :hook (prog-mode . lsp-mode)
+        (lsp-mode . bungusmacs/lsp-mode-setup)
   :config (lsp-enable-which-key-integration t))
 
 (use-package lsp-ui
@@ -332,7 +339,7 @@ With negative N, comment out original line and use the absolute value."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(gnu-apl-mode hl-todo mcf-mode mcf/mcf-mode lsp-ui company cmake-mode which-key-posframe which-key scad-mode lsp-mode magit projectile typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters cobol-mode use-package multiple-cursors doom-modeline)))
+   '(rust-mode gnu-apl-mode hl-todo mcf-mode mcf/mcf-mode lsp-ui company cmake-mode which-key-posframe which-key scad-mode lsp-mode magit projectile typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters cobol-mode use-package multiple-cursors doom-modeline)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
