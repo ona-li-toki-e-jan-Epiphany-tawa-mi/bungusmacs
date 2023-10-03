@@ -289,6 +289,8 @@ With negative N, comment out original line and use the absolute value."
 
 (use-package fasm-mode
   :load-path "fasm-mode.el"
+  :mode "\\.asm\\'"
+        "\\.inc\\'"
   :hook (asm-mode . fasm-mode)) ; makes fasm-mode the default for .asm files.
 
 (use-package rust-mode
