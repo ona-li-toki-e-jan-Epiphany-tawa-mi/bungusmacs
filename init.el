@@ -30,21 +30,23 @@
 ;; - TODO (and similiar) highlighting.
 ;; - Battery level (if applicable), time, and columns in mode line.
 ;; - Sexy doom mode line (if in graphical mode.)
+;; - Display of keypresses/other in modeline with keycast.
 ;; - Line numbers in prog-mode.
 ;; - Automatic import of enviroment variables from .bashrc or similar.
 ;; - Rainbow delimiters (though they kinda hard to see fr fr.)
 ;; - Autoboot into dired on your home directory in fullscreen mode.
 ;; - C-S-SPC to mark the whole file.
 ;; - C-c d to duplicate a line/selection (thank the heavens for stackoverflow.)
-;; - Create extra cursor above/below with <C-S-up>/<C-S-down>.
+;; - Create extra cursor above/below with <C-S-up>/<C-S-down>. Create cursors on
+;;   each match of a selection with C-c s.
 ;; - <C-S-backspace> to delete text from the current position to the start of a
 ;;   line.
 ;; - Completion suggestions for keybinds with which-key.
 ;; - Highlighting of trailing whitespace.
 ;; - Projectile, with C-c p as the base keybind.
 ;; - Magit, with C-c m to open magit-status.
-;; - lsp-mode, with C-c l to activate + automatically runs in prog-mode, C-c l
-;;   as the base keybind, and C-c C-i for a flymake buffer diagnostics buffer.
+;; - lsp-mode, with C-c l to activate + automatically runs in prog-mode with
+;;   C-c l as the base keybind.
 ;;   Flycheck is added for better integration with lsp-ui.
 ;; - Autocompletion with company.
 ;; - Indentation set to 4 spaces, minus the following exceptions:
@@ -159,8 +161,6 @@ With negative N, comment out original line and use the absolute value."
    [?\C-  ?\C-a backspace])
 (global-set-key (kbd "<C-S-backspace>") #'bungusmacs/delete-from-here-to-start-of-line)
 
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library and package system setup.                                          ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -198,9 +198,9 @@ With negative N, comment out original line and use the absolute value."
 
 
 (use-package multiple-cursors
-  :defer
   :bind ("<C-S-up>"   . mc/mark-previous-like-this)
-        ("<C-S-down>" . mc/mark-next-like-this))
+        ("<C-S-down>" . mc/mark-next-like-this)
+        ("C-c s"      . mc/mark-all-like-this))
 
 (use-package which-key
   :defer 0
@@ -210,6 +210,11 @@ With negative N, comment out original line and use the absolute value."
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
+
+(use-package keycast
+  :custom (keycast-mode-line-insert-after '(:eval (doom-modeline-format--main)))
+  :init (add-to-list 'global-mode-string '("" keycast-mode-line))
+  :hook (doom-modeline-mode . keycast-mode-line-mode))
 
 ; Nerd-icons doesn't work right in a terminal.
 (when (display-graphic-p)
@@ -241,7 +246,7 @@ With negative N, comment out original line and use the absolute value."
   :init (setq cobol-tab-width 3))
 
 (use-package gnu-apl-mode
-  ; The value(s) for :mode and :interpreter were pulled from haskell-mode.el to
+  ; The value(s) for :mode and :interpreter were pulled from gnu-apl-mode.el to
   ; defer startup.
   :mode "\\.apl\\'"
   :interpreter "apl"
@@ -301,9 +306,7 @@ With negative N, comment out original line and use the absolute value."
   "Runs various setup functions for lsp-mode."
   ;; Cool breadcrumb stuff at top of file.
   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
-  (lsp-headerline-breadcrumb-mode 1)
-  ;; Easy keybind for diagnostics buffer
-  (local-set-key (kbd "C-c C-i") #'flymake-show-buffer-diagnostics))
+  (lsp-headerline-breadcrumb-mode 1))
 
 (use-package lsp-mode
   :custom (lsp-keymap-prefix "C-c l")
@@ -351,7 +354,7 @@ With negative N, comment out original line and use the absolute value."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(exec-path-from-shell flycheck rust-mode gnu-apl-mode hl-todo mcf-mode mcf/mcf-mode lsp-ui company cmake-mode which-key-posframe which-key scad-mode lsp-mode magit projectile typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters cobol-mode use-package multiple-cursors doom-modeline)))
+   '(keycast exec-path-from-shell flycheck rust-mode gnu-apl-mode hl-todo mcf-mode mcf/mcf-mode lsp-ui company cmake-mode which-key-posframe which-key scad-mode lsp-mode magit projectile typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters cobol-mode use-package multiple-cursors doom-modeline)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
