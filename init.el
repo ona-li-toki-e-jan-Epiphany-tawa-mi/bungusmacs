@@ -57,7 +57,7 @@
 ;;    > Arduino-C++.
 ;;    > Minecraft functions (the command language.)
 ;;    > COBOL.
-;;    > APL.
+;;    > APL (automatically in APL-Z input mode with ` as the prefix.)
 ;;    > BASIC.
 ;;    > OpenSCAD.
 ;;    > CMake.
@@ -235,7 +235,6 @@ With negative N, comment out original line and use the absolute value."
 
 (defun bungusmacs/cobol-mode-setup ()
   "Runs various setup functions for cobol-mode."
-  ;; Disables auto indentation and sets custom sizing.
   (electric-indent-mode -1)
   (setq tab-width 3))
 (use-package cobol-mode
@@ -245,12 +244,20 @@ With negative N, comment out original line and use the absolute value."
          "\\.[cC][pP][yY]\\'")
   :init (setq cobol-tab-width 3))
 
+(defun bungusmacs/gnu-apl-mode-setup ()
+  "Runs various setup functions for gnu-apl-mode."
+  (electric-indent-mode -1)
+  (set-input-method "APL-Z")
+  (customize-set-variable 'gnu-apl-key-prefix 96))
 (use-package gnu-apl-mode
   ; The value(s) for :mode and :interpreter were pulled from gnu-apl-mode.el to
   ; defer startup.
   :mode "\\.apl\\'"
   :interpreter "apl"
-  :custom (gnu-apl-key-prefix 96))
+  :hook (gnu-apl-mode . bungusmacs/gnu-apl-mode-setup)
+        (gnu-apl-interactive-mode . bungusmacs/gnu-apl-mode-setup)
+  :custom (gnu-apl-indent-amounts '(0 2 2 2))
+          (gnu-apl-show-keymap-on-startup nil))
 
 (use-package haskell-mode
   ; The value(s) for :mode and :interpreter were pulled from haskell-mode.el to
