@@ -317,8 +317,9 @@ With negative N, comment out original line and use the absolute value."
 
 (use-package lsp-mode
   :custom (lsp-keymap-prefix "C-c l")
-          (lsp-warn-no-matched-clients nil) ; prevents warnings if a language
-                                            ; server is not avalible.
+          (lsp-warn-no-matched-clients nil)
+          (lsp-pylsp-plugins-pyflakes-enabled t)
+          (lsp-pylsp-plugins-pylint-enabled t)
   :bind ("C-c l" . lsp-mode)
   :hook (prog-mode . lsp-mode)
         (lsp-mode . bungusmacs/lsp-mode-setup)
