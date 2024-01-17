@@ -62,7 +62,6 @@
 ;;    > OpenSCAD.
 ;;    > CMake.
 ;;    > FASM.
-;;    > Rust.
 ;; - Displays startup time on startup.
 ;;
 ;; Author: ona li toki e jan Epiphany tawa mi.
@@ -197,37 +196,43 @@ With negative N, comment out original line and use the absolute value."
 
 
 
+;; Multiple cursors for typing en-masse.
 (use-package multiple-cursors
   :bind ("<C-S-up>"   . mc/mark-previous-like-this)
         ("<C-S-down>" . mc/mark-next-like-this)
         ("C-c s"      . mc/mark-all-like-this))
 
+;; Provides completions for key combinations.
 (use-package which-key
   :defer 0
   :config (which-key-mode 1))
 
 
 
+;; Sexy rainbow-colored delimiters for to help differntiate them.
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
+;; Shows which keys I use for an ego boost.
 (use-package keycast
   :custom (keycast-mode-line-insert-after '(:eval (doom-modeline-format--main)))
   :init (add-to-list 'global-mode-string '("" keycast-mode-line))
   :hook (doom-modeline-mode . keycast-mode-line-mode))
 
-; Nerd-icons doesn't work right in a terminal.
-(when (display-graphic-p)
+;; Sexy doom modeline.
+(when (display-graphic-p) ; Nerd-icons doesn't work right in a terminal.
   (use-package nerd-icons)
   (use-package doom-modeline
     :after nerd-icons
     :init (doom-modeline-mode 1)))
 
+;; Sexy doom themes.
 (use-package doom-themes
   :custom (doom-themes-enable-bold t)
           (doom-themes-enable-italic t)
   :config (load-theme 'doom-Iosvkem t))
 
+;; Highlights TODOs and similar in code comments.
 (use-package hl-todo
   :hook (prog-mode . hl-todo-mode))
 
@@ -305,16 +310,13 @@ With negative N, comment out original line and use the absolute value."
         "\\.inc\\'"
   :hook (asm-mode . fasm-mode)) ; makes fasm-mode the default for .asm files.
 
-(use-package rust-mode
-  :mode "\\.rs\\'")
 
-
+;; Language Server Protocol for an IDE-like experience.
 (defun bungusmacs/lsp-mode-setup ()
   "Runs various setup functions for lsp-mode."
   ;; Cool breadcrumb stuff at top of file.
   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
   (lsp-headerline-breadcrumb-mode 1))
-
 (use-package lsp-mode
   :custom (lsp-keymap-prefix "C-c l")
           (lsp-warn-no-matched-clients nil)
@@ -325,15 +327,18 @@ With negative N, comment out original line and use the absolute value."
         (lsp-mode . bungusmacs/lsp-mode-setup)
   :config (lsp-enable-which-key-integration t))
 
+;; Improves interface of LSP stuff.
 (use-package lsp-ui
   :after lsp-mode
   :hook (lsp-mode . lsp-ui-mode))
 
+;; Better static analysis.
 (use-package flycheck
   :after lsp-mode)
 
 
 
+;; Autocompletion.
 (use-package company
   :hook (prog-mode . company-mode)
   :bind (:map company-active-map
@@ -342,6 +347,7 @@ With negative N, comment out original line and use the absolute value."
 
 
 
+;; Project management tool.
 (use-package projectile
   :config (projectile-mode)
   :bind-keymap ("C-c p" . projectile-command-map)
@@ -350,6 +356,7 @@ With negative N, comment out original line and use the absolute value."
 
 
 
+;; Lovely git interface.
 (use-package magit
   :bind ("C-c m" . magit-status))
 
@@ -362,7 +369,7 @@ With negative N, comment out original line and use the absolute value."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(keycast exec-path-from-shell flycheck rust-mode gnu-apl-mode hl-todo mcf-mode mcf/mcf-mode lsp-ui company cmake-mode which-key-posframe which-key scad-mode lsp-mode magit projectile typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters cobol-mode use-package multiple-cursors doom-modeline)))
+   '(keycast exec-path-from-shell flycheck gnu-apl-mode hl-todo mcf-mode mcf/mcf-mode lsp-ui company cmake-mode which-key-posframe which-key scad-mode lsp-mode magit projectile typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters cobol-mode use-package multiple-cursors doom-modeline)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
