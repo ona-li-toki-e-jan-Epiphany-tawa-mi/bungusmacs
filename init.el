@@ -35,7 +35,6 @@
 ;; - Automatic import of enviroment variables from .bashrc or similar.
 ;; - Rainbow delimiters (though they kinda hard to see fr fr.)
 ;; - Autoboot into dired on your home directory in fullscreen mode.
-;; - C-S-SPC to mark the whole file.
 ;; - C-c d to duplicate a line/selection (thank the heavens for stackoverflow.)
 ;; - Create extra cursor above/below with <C-S-up>/<C-S-down>. Create cursors on
 ;;   each match of a selection with C-c s.
@@ -127,8 +126,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Non-package keybinds.                                                      ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(global-set-key (kbd "C-S-SPC") #'mark-whole-buffer)
-
 ;; Duplicates a line with C-c d.
 ;; https://stackoverflow.com/a/4717026
 (defun bungusmacs/duplicate-line-or-region (&optional n)
@@ -308,7 +305,11 @@ With negative N, comment out original line and use the absolute value."
   :load-path "fasm-mode.el"
   :mode "\\.asm\\'"
         "\\.inc\\'"
-  :hook (asm-mode . fasm-mode)) ; makes fasm-mode the default for .asm files.
+        :hook (asm-mode . fasm-mode)) ; makes fasm-mode the default for .asm files.
+
+(use-package nix-mode
+  ; The value(s) for :mode was pulled from nix-mode.el to defer startup.
+  :mode "\\.nix\\'")
 
 
 ;; Language Server Protocol for an IDE-like experience.
@@ -351,7 +352,7 @@ With negative N, comment out original line and use the absolute value."
 (use-package projectile
   :config (projectile-mode)
   :bind-keymap ("C-c p" . projectile-command-map)
-  :custom (projectile-project-search-path '(("~/Proyekty/" . 2)))
+  :custom (projectile-project-search-path '("~/Code/"))
           (projectile-switch-project-action #'projectile-dired))
 
 
@@ -369,7 +370,7 @@ With negative N, comment out original line and use the absolute value."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(keycast exec-path-from-shell flycheck gnu-apl-mode hl-todo mcf-mode mcf/mcf-mode lsp-ui company cmake-mode which-key-posframe which-key scad-mode lsp-mode magit projectile typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters cobol-mode use-package multiple-cursors doom-modeline)))
+   '(nix-mode keycast exec-path-from-shell flycheck gnu-apl-mode hl-todo mcf-mode mcf/mcf-mode lsp-ui company cmake-mode which-key-posframe which-key scad-mode lsp-mode magit projectile typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters cobol-mode use-package multiple-cursors doom-modeline)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
