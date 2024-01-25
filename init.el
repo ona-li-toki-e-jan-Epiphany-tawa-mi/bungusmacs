@@ -45,7 +45,7 @@
 ;; - Projectile, with C-c p as the base keybind.
 ;; - Magit, with C-c m to open magit-status.
 ;; - lsp-mode, with C-c l to activate + automatically runs in prog-mode with
-;;   C-c l as the base keybind.
+;;   C-c l as the base keybind. Note: will not ask to install language servers.
 ;;   Flycheck is added for better integration with lsp-ui.
 ;; - Autocompletion with company.
 ;; - Indentation set to 4 spaces, minus the following exceptions:
@@ -62,6 +62,7 @@
 ;;    > CMake.
 ;;    > FASM.
 ;; - Displays startup time on startup.
+;; - Suppression of the annoying bytecode compiler warnings buffer popups.
 ;;
 ;; Author: ona li toki e jan Epiphany tawa mi.
 
@@ -120,6 +121,10 @@
            (emacs-init-time "%.2f")
            gcs-done))
 (add-hook 'emacs-startup-hook #'bungusmacs/display-startup-time)
+
+;; Disables the super annoying bytecode-compiler warnings buffers from popping
+;; up.
+(setq native-comp-async-report-warnings-errors 'silent)
 
 
 
@@ -323,6 +328,7 @@ With negative N, comment out original line and use the absolute value."
           (lsp-warn-no-matched-clients nil)
           (lsp-pylsp-plugins-pyflakes-enabled t)
           (lsp-pylsp-plugins-pylint-enabled t)
+          (lsp-enable-suggest-server-download nil)
   :bind ("C-c l" . lsp-mode)
   :hook (prog-mode . lsp-mode)
         (lsp-mode . bungusmacs/lsp-mode-setup)
