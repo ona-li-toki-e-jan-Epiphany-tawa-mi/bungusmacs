@@ -113,6 +113,9 @@
 ;; No more shitty *~ files.
 (setq make-backup-files nil)
 
+;; Enables C-x C-l to lowercase a region.
+(put 'downcase-region 'disabled nil)
+
 ;; Automatically removes excess whitespace before saving.
 (add-hook 'before-save-hook #'whitespace-cleanup)
 
