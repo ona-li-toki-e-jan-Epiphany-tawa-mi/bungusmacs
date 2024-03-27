@@ -54,7 +54,6 @@
 ;;    > Haskell.
 ;;    > Typescript.
 ;;    > Arduino-C++.
-;;    > Minecraft functions (the command language.)
 ;;    > COBOL.
 ;;    > APL (automatically in APL-Z input mode with ` as the prefix.)
 ;;    > BASIC.
@@ -165,6 +164,8 @@ With negative N, comment out original line and use the absolute value."
    [?\C-  ?\C-a backspace])
 (global-set-key (kbd "<C-S-backspace>") #'bungusmacs/delete-from-here-to-start-of-line)
 
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library and package system setup.                                          ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -186,7 +187,6 @@ With negative N, comment out original line and use the absolute value."
 
 
 ;; Local-elisp-file load path.
-(add-to-list 'load-path "~/.emacs.d/mcf")
 (add-to-list 'load-path "~/.emacs.d/fasm")
 
 
@@ -291,15 +291,6 @@ With negative N, comment out original line and use the absolute value."
   ; The value(s) for :mode was pulled from typescript-mode.el to defer startup.
   :mode "\\.tsx?\\'")
 
-(defun bungusmacs/mcf-mode-setup ()
-  "Runs various setup functions for mcf-mode."
-  (electric-indent-mode -1))
-(use-package mcf-mode
-  :load-path "mcf-mode.el"
-  :hook (mcf-mode-hook . bungusmacs/mcf-mode-setup)
-  ; The value(s) for :mode was pulled from mcf-mode.el to defer startup.
-  :mode "\\.mcfunction\\'")
-
 (use-package scad-mode
   ; The value(s) for :mode was pulled from scad-mode.el to defer startup.
   :mode "\\.scad\\'")
@@ -379,7 +370,7 @@ With negative N, comment out original line and use the absolute value."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(nix-mode keycast exec-path-from-shell flycheck gnu-apl-mode hl-todo mcf-mode mcf/mcf-mode lsp-ui company cmake-mode which-key-posframe which-key scad-mode lsp-mode magit projectile typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters cobol-mode use-package multiple-cursors doom-modeline)))
+   '(nix-mode keycast exec-path-from-shell flycheck gnu-apl-mode hl-todo lsp-ui company cmake-mode which-key-posframe which-key scad-mode lsp-mode magit projectile typescript-mode basic-mode arduino-mode haskell-mode rainbow-delimiters cobol-mode use-package multiple-cursors doom-modeline)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
