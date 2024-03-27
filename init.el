@@ -30,7 +30,6 @@
 ;; - TODO (and similiar) highlighting.
 ;; - Battery level (if applicable), time, and columns in mode line.
 ;; - Sexy doom mode line (if in graphical mode.)
-;; - Display of keypresses/other in modeline with keycast.
 ;; - Line numbers in prog-mode.
 ;; - Automatic import of enviroment variables from .bashrc or similar.
 ;; - Rainbow delimiters (though they kinda hard to see fr fr.)
@@ -217,12 +216,6 @@ With negative N, comment out original line and use the absolute value."
 ;; Sexy rainbow-colored delimiters for to help differntiate them.
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
-
-;; Shows which keys I use for an ego boost.
-(use-package keycast
-  :custom (keycast-mode-line-insert-after '(:eval (doom-modeline-format--main)))
-  :init (add-to-list 'global-mode-string '("" keycast-mode-line))
-  :hook (doom-modeline-mode . keycast-mode-line-mode))
 
 ;; Sexy doom modeline.
 (when (display-graphic-p) ; Nerd-icons doesn't work right in a terminal.
